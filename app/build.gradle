@@ -1,0 +1,72 @@
+apply plugin: 'com.android.application'
+apply from: "package.gradle"
+
+
+def cfg = rootProject.ext.android
+def librarys = rootProject.ext.dependencies
+
+
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file("keyStore.properties")
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+
+    signingConfigs {
+        debug {
+            keyAlias keystoreProperties['keyAlias_deb']
+            keyPassword keystoreProperties['keyPassword_deb']
+            storeFile file(keystoreProperties['storeFile_deb'])
+            storePassword keystoreProperties['storePassword_deb']
+        }
+        release {
+            keyAlias keystoreProperties['keyAlias_rel']
+            keyPassword keystoreProperties['keyPassword_rel']
+            storeFile file(keystoreProperties['storeFile_rel'])
+            storePassword keystoreProperties['storePassword_rel']
+        }
+    }
+
+    compileSdkVersion cfg.compileSdkVersion
+    buildToolsVersion cfg.buildToolsVersion
+
+    defaultConfig {
+        applicationId cfg.applicationId
+        minSdkVersion cfg.minSdkVersion
+        targetSdkVersion cfg.targetSdkVersion
+        versionCode cfg.versionCode
+        versionName cfg.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            shrinkResources true
+            buildConfigField "String", "Pad_service", "\"${url["Service"]}\""
+            buildConfigField "String", "Pad_manager","\"${url["Manger"]}\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled true
+            shrinkResources false
+            debuggable true
+            buildConfigField "String", "Pad_service", "\"${url["Service"]}\""
+            buildConfigField "String", "Pad_manager","\"${url["Manger"]}\""
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    librarys.each { k, v -> compile v }
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    testCompile 'junit:junit:4.12'
+}

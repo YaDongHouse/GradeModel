@@ -1,0 +1,62 @@
+/**
+ * 在主项目的根目录下创建config.gradle文件
+ * 在这里单独处理统一依赖问题
+ * 注意需要在根目录的build.gradle中进行引入
+ */
+
+ext {
+
+    android = [
+            compileSdkVersion: 25,
+            buildToolsVersion: "25.0.3",
+            minSdkVersion    : 16,
+            targetSdkVersion : 25,
+            applicationId    : "com.yadong.gradle",
+            versionCode      : 1,
+            versionName      : "1.0.0"
+    ]
+
+    tinker = [
+            id       : android.versionName,
+            baseApkDir  : "app-0208-15-10-00",
+            baseApk: "app-release.apk",
+            tinkerId  : "base-1.0.1",
+    ]
+
+    url = [
+            //测试环境
+            "Service"  : "debugUrl1",
+            "Manger": "releaseUrl1",
+            //预发布
+//            "Service"  : "debugUrl1",
+//            "Manger": "releaseUrl1",
+            //正式环境
+//            "Service"  : "debugUrl1",
+//            "Manger": "releaseUrl1",
+    ]
+
+
+    //Version
+    supportLibrary = "25.3.1"
+    crashreportVersion = "1.3.4"
+
+    dependencies = [
+            /*support库*/
+            "multidex"            : "com.android.support:multidex:1.0.1",
+            "cardview"            : "com.android.support:cardview-v7:${supportLibrary}",
+            "constraint"          : "com.android.support.constraint:constraint-layout:1.0.2",
+            "recyclerview"        : "com.android.support:recyclerview-v7:${supportLibrary}",
+            "supportV4"           : "com.android.support:support-v4:${supportLibrary}",
+            "suppoutDesign"       : "com.android.support:design:${supportLibrary}",
+            "supportAppcompat"    : "com.android.support:appcompat-v7:${supportLibrary}",
+
+            /*bugly*/
+            "crashreport_upgrade"          : "com.tencent.bugly:crashreport_upgrade:${crashreportVersion}",
+
+            /*packer 打包*/
+            "packer-ng"               : "com.mcxiaoke.packer-ng:helper:2.0.0",
+
+    ]
+
+
+}

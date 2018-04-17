@@ -1,0 +1,38 @@
+apply plugin: 'packer'
+packer {
+    //指定最终输出的渠道包文件名的格式模板
+
+    /**
+     * projectName - 项目名字
+     * appName - App模块名字
+     * appPkg - applicationId (App包名packageName)
+     * channel - 打包时指定的渠道名
+     * buildType - buildType (release/debug/beta等)
+     * flavor - flavor (flavor名字，如paid/free等)
+     * versionName - versionName (显示用的版本号)
+     * versionCode - versionCode (内部版本号)
+     * buildTime - buildTime (编译构建日期时间)
+     * fileSHA1 - fileSHA1 (最终APK文件的SHA1哈希值)
+     *
+     */
+
+    archiveNameFormat = '${channel}-v${buildTime}-${versionName}-${buildType}'
+    //指定最终输出的渠道包的存储位置，默认是${project.buildDir}/archives
+    archiveOutput = new File(project.rootProject.buildDir, "apks")
+
+    //指定渠道列表，List
+//    channelList = ['xiaomi','meizu']
+    //指定渠道列表文件，File
+    channelFile = new File(project.rootDir, "markets.txt")
+
+    //根据productFlavor指定不同的渠道列表
+//    channelMap = [
+//            "Cat" : project.rootProject.file("channels/cat.txt"),
+//            "Dog" : project.rootProject.file("channels/dog.txt"),
+//            "Fish": project.rootProject.file("channels/channels.txt")
+//    ]
+
+    //channelList / channelMap / channelFile 不能同时使用，根据实际情况选择一种即可，
+    // 三个属性同时存在时优先级为： channelList > channelMap > channelFile，另外，这三个属性会被命令行参数 -Pchannels 覆盖
+
+}
